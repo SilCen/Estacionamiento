@@ -10,13 +10,10 @@ package Estacionamiento;
  * @author Admin
  */
 public class Motos extends Vehiculos {
-    private float precio;
-   
-    
-    public Motos (String modelo, String marca, String dominio, String propietario, float precio){
-        super (modelo, marca, dominio, propietario);
-        this.precio = precio;
         
+    public Motos (String modelo, String marca, String dominio){
+        super (modelo, marca, dominio);
+            
     }
     
 }

@@ -13,6 +13,6 @@ import java.util.ArrayList;
  * @author Admin
  */
 public abstract class DB {
-    abstract public ArrayList<Vehiculos> getListaVehiculos;
+    abstract public ArrayList<Vehiculos>getListaVehiculos();
+    }
     
-}
