@@ -13,11 +13,13 @@ public class Vehiculos {
     private String modelo;
     private String marca;
     private String dominio;
+    private int propId;
        
-    protected Vehiculos(String modelo, String marca, String dominio){
+    protected Vehiculos(String modelo, String marca, String dominio, int propId){
         this.modelo = modelo;
         this.marca = marca;
         this.dominio = dominio;
+        this.propId = propId;
     }
 
     /**

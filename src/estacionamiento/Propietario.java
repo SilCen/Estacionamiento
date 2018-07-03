@@ -15,13 +15,11 @@ public class Propietario {
     
     private String ApeNomPropietario;
     private int DniPropietario;
-    private int IDProp;
     private ArrayList<Vehiculos> listaVehiculos;
     
-    public Propietario (String ApeNomPropietario, int DniPropietario, int IDProp){
+    public Propietario (String ApeNomPropietario, int DniPropietario){
         this.ApeNomPropietario = ApeNomPropietario;
         this.DniPropietario = DniPropietario;
-        this.IDProp = IDProp;
     }
 
     /**
@@ -36,13 +34,6 @@ public class Propietario {
      */
     public int getDniPropietario() {
         return DniPropietario;
-    }
-
-    /**
-     * @return the IDPropietario
-     */
-    public int getIDProp() {
-        return IDProp;
     }
    
 }
