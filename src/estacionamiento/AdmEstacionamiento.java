@@ -20,9 +20,7 @@ import java.util.logging.Logger;
  * @author Admin
  */
 public class AdmEstacionamiento {
-    private Scanner scanner = new Scanner(System.in);
-    private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    
+       
     public void printMenu(){
         System.out.print("Menu\n\n"
                 + "1-Agregar Propietario\n"
@@ -30,9 +28,8 @@ public class AdmEstacionamiento {
                 + "3-Salir\n"
                 + "Ingrese opcion: ");
     }
-    
-    private void runCommand(int option){
-        
+    private boolean runCommand(int option){
+        boolean salir = false;
         switch (option){
             case 1:
                 agregarPropietario();
@@ -45,42 +42,32 @@ public class AdmEstacionamiento {
             default:
                 break;
         }
+        return salir;
     }
     
     public void runMenu(){
-        int option = 0;
+        int option =0;
+        boolean cmd;
         do {printMenu();
-        option = scanner.nextInt();
-        runCommand(option);
-        }while (option !=3);
+        option = Utils.readIntCLI();
+        cmd = runCommand(option);
+        }while (!cmd);
         
     }
-    
-    private String readStringCLI(){    
-        String valor="";
-        try {
-            valor = in.readLine();
-        } catch (IOException ex) {
-            Logger.getLogger(AdmEstacionamiento.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return valor;
-    }
-    
+       
     private void agregarPropietario(){
         System.out.print("Nombre del propietario: ");
-        String apellidoNombre =readStringCLI();
+        String apellidoNombre =Utils.readStringCLI();
         System.out.print("Ingrese Dni: ");
-        int dni = scanner.nextInt(); 
+        int dni = Utils.readIntCLI(); 
         Propietario prop = new Propietario (apellidoNombre, dni); 
-    
-        cine= admCines.addCine(nombre);
-     
+        //cine= admCines.addCine(nombre);
     }
     
     private void agregarVehiculo(){
     }
     
-    public void CargaVehiculos(String mod, String mar, String dom, int tipo, int propId){
+    public void cargaVehiculos(String mod, String mar, String dom, int tipo, int propId){
         ArrayList<Estacionamiento.Vehiculos> listaVehiculos;
         Vehiculos V = null;
         
