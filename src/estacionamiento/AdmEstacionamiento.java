@@ -3,23 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package estacionamiento;
+package Estacionamiento;
 
 import DataBase.DB;
 import DataBase.LocalDB;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
  * @author Admin
  */
 public class AdmEstacionamiento {
+private DB db = new LocalDB();
 
     public void printMenu() {
         System.out.print("Menu\n\n"
@@ -58,31 +54,72 @@ public class AdmEstacionamiento {
 
     }
 
+    private boolean checkUser(int dni) {
+        ArrayList<Propietario> listaPropietario; //declaro lista
+        boolean result = false;
+
+        listaPropietario = db.getListaPropietarios();
+
+        for (int i = 0; i < listaPropietario.size(); i++) {
+            if (dni == listaPropietario.get(i).getDni()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+    
     private void agregarPropietario() {
         ArrayList<Estacionamiento.Propietario> listaPropietarios;
-                
-        DB db = new LocalDB();
+
         listaPropietarios = db.getListaPropietarios();
-        
+
         System.out.print("Nombre del propietario: ");
         String apellidoNombre = Utils.readStringCLI();
         System.out.print("Ingrese Dni: ");
         int dni = Utils.readIntCLI();
-        Propietario prop = new Propietario(apellidoNombre, dni);
-        
-        listaPropietarios.add(prop);
-        
+        if (checkUser(dni)) {
+            System.out.println("Usuario existente: " + dni);
+        } else {
+            Propietario prop = new Propietario(apellidoNombre, dni);
+            listaPropietarios.add(prop);
+        }
+    }
+    
+    private boolean checkVehiculo(String dom, int dni) {
+        ArrayList<Vehiculos> listaVehiculo; //declaro lista
+        boolean result = false;
+
+        listaVehiculo = db.getListaVehiculos();
+
+        for (int i = 0; i < listaVehiculo.size(); i++) {
+            if (dni == listaVehiculo.get(i).getPropId()
+                    && dom.equals(listaVehiculo.get(i).getDominio())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     private void agregarVehiculo() {
         System.out.print("Ingrese el DNI del propietario: ");
         int dni = Utils.readIntCLI();
+        
+        if (!checkUser(dni)){
+        agregarPropietario();
+        }
+             
+        System.out.print("Ingrese el dominio: ");
+        String dom = Utils.readStringCLI();
+        if (checkVehiculo(dom, dni)){
+            System.out.println("Este vehiculo ya ha sido registrado con este usuario: " + dni + " Dominio: " + dom);
+            return;
+        }
         System.out.print("Ingrese el modelo: ");
         String mod = Utils.readStringCLI();
         System.out.print("Ingrese la marca: ");
         String mar = Utils.readStringCLI();
-        System.out.print("Ingrese el dominio: ");
-        String dom = Utils.readStringCLI();
         System.out.print("Ingrese el tipo de (1. Auto - 2. Moto): ");
         int tipo = Utils.readIntCLI();
         cargaVehiculos(mod, mar, dom, tipo, dni);
@@ -96,8 +133,7 @@ public class AdmEstacionamiento {
         ArrayList<Estacionamiento.Vehiculos> listaVehiculos;
         Vehiculos V = null;
 
-        DB db = new LocalDB();
-        listaVehiculos = db.getListaVehiculos();
+        listaVehiculos = db.getListaVehiculos(); 
 
         switch (tipo) {
             case 1:

@@ -43,5 +43,7 @@ public class Vehiculos {
         return dominio;
     }
     
-    
+    public int getPropId(){
+    return propId; 
+    }
 }

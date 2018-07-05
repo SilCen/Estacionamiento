@@ -32,7 +32,7 @@ public class Propietario {
     /**
      * @return the DniPropietario
      */
-    public int getDniPropietario() {
+    public int getDni() {
         return DniPropietario;
     }
    

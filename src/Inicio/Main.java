@@ -5,7 +5,7 @@
  */
 package Inicio;
 
-import estacionamiento.AdmEstacionamiento;
+import Estacionamiento.AdmEstacionamiento;
 
 /**
  *
