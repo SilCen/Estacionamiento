@@ -70,17 +70,34 @@ private DB db = new LocalDB();
     }
     
     private void agregarPropietario() {
+        //ArrayList<Estacionamiento.Propietario> listaPropietarios;
+
+        //listaPropietarios = db.getListaPropietarios();
+
+        System.out.print("Ingrese DNI: ");
+        int dni = Utils.readIntCLI();
+        /*if (checkUser(dni)) {
+            System.out.println("Usuario existente: " + dni);
+        } else {
+            System.out.print("Nombre del propietario: ");
+            String apellidoNombre = Utils.readStringCLI();
+
+            Propietario prop = new Propietario(apellidoNombre, dni);
+            listaPropietarios.add(prop);
+        }*/
+        agregarDniProp(dni);
+    }
+    private void agregarDniProp(int dni) {
         ArrayList<Estacionamiento.Propietario> listaPropietarios;
 
         listaPropietarios = db.getListaPropietarios();
 
-        System.out.print("Nombre del propietario: ");
-        String apellidoNombre = Utils.readStringCLI();
-        System.out.print("Ingrese Dni: ");
-        int dni = Utils.readIntCLI();
         if (checkUser(dni)) {
             System.out.println("Usuario existente: " + dni);
         } else {
+            System.out.print("Nombre del propietario: ");
+            String apellidoNombre = Utils.readStringCLI();
+
             Propietario prop = new Propietario(apellidoNombre, dni);
             listaPropietarios.add(prop);
         }
@@ -103,32 +120,29 @@ private DB db = new LocalDB();
     }
 
     private void agregarVehiculo() {
-        System.out.print("Ingrese el DNI del propietario: ");
+        System.out.println("Ingrese el DNI del propietario: ");
         int dni = Utils.readIntCLI();
         
-        if (!checkUser(dni)){
-        agregarPropietario();
+        if (!checkUser(dni)) {
+            System.out.println("El propietario no existe, debe ingresarlo");
+            agregarDniProp(dni);
         }
              
-        System.out.print("Ingrese el dominio: ");
+        System.out.println("Ingrese el dominio: ");
         String dom = Utils.readStringCLI();
         if (checkVehiculo(dom, dni)){
-            System.out.println("Este vehiculo ya ha sido registrado con este usuario: " + dni + " Dominio: " + dom);
+            System.out.println("Este vehiculo ya ha sido registrado con este propietario (DNI): " + dni + " Dominio: " + dom);
             return;
         }
-        System.out.print("Ingrese el modelo: ");
+        System.out.println("Ingrese el modelo: ");
         String mod = Utils.readStringCLI();
-        System.out.print("Ingrese la marca: ");
+        System.out.println("Ingrese la marca: ");
         String mar = Utils.readStringCLI();
-        System.out.print("Ingrese el tipo de (1. Auto - 2. Moto): ");
+        System.out.println("Ingrese el tipo de (1. Auto - 2. Moto): ");
         int tipo = Utils.readIntCLI();
         cargaVehiculos(mod, mar, dom, tipo, dni);
     }
 
-    //private String buscarPropietario(){
-    // String propietario;
-    //   return propietario;
-    //}
     public void cargaVehiculos(String mod, String mar, String dom, int tipo, int propId) {
         ArrayList<Estacionamiento.Vehiculos> listaVehiculos;
         Vehiculos V = null;
