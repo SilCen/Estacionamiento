@@ -130,10 +130,13 @@ private DB db = new LocalDB();
              
         System.out.println("Ingrese el dominio: ");
         String dom = Utils.readStringCLI();
+        
         if (checkVehiculo(dom, dni)){
             System.out.println("Este vehiculo ya ha sido registrado con este propietario (DNI): " + dni + " Dominio: " + dom);
             return;
         }
+        
+        if (!checkDominio(dom))
         System.out.println("Ingrese el modelo: ");
         String mod = Utils.readStringCLI();
         System.out.println("Ingrese la marca: ");
@@ -143,6 +146,21 @@ private DB db = new LocalDB();
         cargaVehiculos(mod, mar, dom, tipo, dni);
     }
 
+    public boolean checkDominio(String dom){
+     ArrayList<Estacionamiento.Vehiculos> listaVehiculo;
+        boolean result= false;
+        
+        listaVehiculo = db.getListaVehiculos();
+        
+        for (int i = 0; i < listaVehiculo.size(); i++) {
+            if (dom == listaVehiculo.get(i).getDominio()){
+                result = true;
+                break;
+            }
+            }
+        return result;
+    }
+    
     public void cargaVehiculos(String mod, String mar, String dom, int tipo, int propId) {
         ArrayList<Estacionamiento.Vehiculos> listaVehiculos;
         Vehiculos V = null;
