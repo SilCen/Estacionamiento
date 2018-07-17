@@ -14,12 +14,15 @@ public class Vehiculos {
     private String marca;
     private String dominio;
     private int propId;
-       
-    protected Vehiculos(String modelo, String marca, String dominio, int propId){
+    private Tipo coso;
+    public enum Tipo {AUTO, MOTO};
+    
+    protected Vehiculos(String modelo, String marca, String dominio, int propId, Tipo coso){
         this.modelo = modelo;
         this.marca = marca;
         this.dominio = dominio;
         this.propId = propId;
+        this.coso = coso;
     }
 
     /**
@@ -45,5 +48,9 @@ public class Vehiculos {
     
     public int getPropId(){
     return propId; 
+    }
+    
+    public Tipo getTipo(){
+    return coso;
     }
 }

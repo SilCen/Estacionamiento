@@ -12,7 +12,7 @@ package Estacionamiento;
 public class Motos extends Vehiculos {
         
     public Motos (String modelo, String marca, String dominio, int propId){
-        super (modelo, marca, dominio, propId);
+        super (modelo, marca, dominio, propId, Tipo.MOTO);
             
     }
     

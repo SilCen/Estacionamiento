@@ -12,6 +12,6 @@ package Estacionamiento;
 public class Autos extends Vehiculos {
    
     public Autos (String modelo, String marca, String dominio, int propId){
-        super (modelo, marca, dominio, propId);
+        super (modelo, marca, dominio, propId, Tipo.AUTO);
    }
 }
