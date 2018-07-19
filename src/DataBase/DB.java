@@ -5,7 +5,7 @@
  */
 package DataBase;
 
-import Estacionamiento.Vehiculos;
+import Estacionamiento.Vehiculo;
 import Estacionamiento.Propietario;
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Admin
  */
 public abstract class DB {
-    abstract public ArrayList<Vehiculos>getListaVehiculos();
-    abstract public ArrayList<Propietario>getListaPropietarios();
+    abstract public ArrayList<Vehiculo>getListaVehiculo();
+    abstract public ArrayList<Propietario>getListaPropietario();
     }
     

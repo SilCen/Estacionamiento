@@ -5,7 +5,7 @@
  */
 package DataBase;
 
-import Estacionamiento.Vehiculos;
+import Estacionamiento.Vehiculo;
 import Estacionamiento.Propietario;
 import java.util.ArrayList;
 
@@ -14,14 +14,14 @@ import java.util.ArrayList;
  * @author Admin
  */
 public class LocalDB extends DB{
-    private static ArrayList<Vehiculos> listaVehiculos = new ArrayList();
+    private static ArrayList<Vehiculo> listaVehiculo = new ArrayList();
     private static ArrayList<Propietario> listaPropietario = new ArrayList();
     
-    public ArrayList<Vehiculos>getListaVehiculos(){
-        return listaVehiculos;
+    public ArrayList<Vehiculo>getListaVehiculo(){
+        return listaVehiculo;
     }
     
-    public ArrayList<Propietario>getListaPropietarios(){
+    public ArrayList<Propietario>getListaPropietario(){
         return listaPropietario;
     }
     
