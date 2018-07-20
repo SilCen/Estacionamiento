@@ -12,11 +12,11 @@ import java.util.ArrayList;
  * @author Admin
  */
 public class Propietario {
-    
+
     private String ApeNomPropietario;
     private int DniPropietario;
     private ArrayList<Vehiculo> listaVehiculo;
-    boolean abono;
+    private boolean abono;
     
     public Propietario (String ApeNomPropietario, int DniPropietario){
         this.ApeNomPropietario = ApeNomPropietario;
@@ -37,4 +37,19 @@ public class Propietario {
     public int getDni() {
         return DniPropietario;
     }
+    
+    /**
+     * @return the abono
+     */
+    public boolean isAbono() {
+        return abono;
+    }
+
+    /**
+     * @param abono the abono to set
+     */
+    public void setAbono(boolean abono) {
+        this.abono = abono;
+    }
+    
 }

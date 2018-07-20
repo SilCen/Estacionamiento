@@ -22,7 +22,8 @@ private DB db = new LocalDB();
         System.out.print("Menu\n\n"
                 + "1-Agregar Propietario\n"
                 + "2-Agregar Vehiculo\n"
-                + "3-Salir\n"
+                + "3-AB de Abono\n"
+                + "4-Salir\n"
                 + "Ingrese opcion: ");
     }
 
@@ -36,6 +37,9 @@ private DB db = new LocalDB();
                 agregarVehiculo();
                 break;
             case 3:
+                abAbono();
+                break;
+            case 4:
                 salir = true;
                 break;
             default:
@@ -71,27 +75,14 @@ private DB db = new LocalDB();
     }
     
     private void agregarPropietario() {
-        //ArrayList<Estacionamiento.Propietario> listaPropietarios;
-
-        //listaPropietarios = db.getListaPropietario();
-
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
-        /*if (checkUser(dni)) {
-            System.out.println("Usuario existente: " + dni);
-        } else {
-            System.out.print("Nombre del propietario: ");
-            String apellidoNombre = Utils.readStringCLI();
-
-            Propietario prop = new Propietario(apellidoNombre, dni);
-            listaPropietarios.add(prop);
-        }*/
         agregarDniProp(dni);
     }
     private void agregarDniProp(int dni) {
-        ArrayList<Estacionamiento.Propietario> listaPropietarios;
+        ArrayList<Estacionamiento.Propietario> listaPropietario;
 
-        listaPropietarios = db.getListaPropietario();
+        listaPropietario = db.getListaPropietario();
 
         if (checkUser(dni)) {
             System.out.println("Usuario existente: " + dni);
@@ -100,7 +91,7 @@ private DB db = new LocalDB();
             String apellidoNombre = Utils.readStringCLI();
 
             Propietario prop = new Propietario(apellidoNombre, dni);
-            listaPropietarios.add(prop);
+            listaPropietario.add(prop);
         }
     }
     
@@ -143,20 +134,19 @@ private DB db = new LocalDB();
             System.out.println("Ingrese la marca: ");
             String mar = Utils.readStringCLI();
             System.out.println("Ingrese el tipo de (1. Auto - 2. Moto): ");
+
             int tipoNum = 0;
-            
-            int cont=0;
+            int cont = 0;
             do {
                 cont++;
                 tipoNum = Utils.readIntCLI();
-                if(tipoNum <= Tipo.values().length){
+                if (tipoNum <= Tipo.values().length) {
                     break;
                 }
-             System.out.println("Ingreso incorrecto");
+                System.out.println("Ingreso incorrecto");
             } while (cont < 3);
-                      
-            Tipo tipo=null;
-                        
+
+            Tipo tipo = null;
             switch (tipoNum) {
                 case 1:
                     tipo = Tipo.AUTO;
@@ -165,24 +155,20 @@ private DB db = new LocalDB();
                 case 2:
                     tipo = Tipo.MOTO;
                     break;
-                    
+
                 default:
                     return;
             }
-            
-        
-        cargaVehiculo(mod, mar, dom, tipo, dni);
-        System.out.println("La registracion del vehiculo fue exitosa");
+
+            cargaVehiculo(mod, mar, dom, tipo, dni);
+            System.out.println("La registracion del vehiculo fue exitosa");
+        } else {
+            Vehiculo v = getVehiculo(dom);
+            cargaVehiculo(v.getModelo(), v.getMarca(), dom, v.getTipo(), dni);
+            System.out.println("Se asigno el vehiculo con dominio: " + dom + " a: " + dni);
         }
-        else
-        {
-         Vehiculo v = getVehiculo(dom);
-         cargaVehiculo(v.getModelo(),v.getMarca(),dom,v.getTipo(),dni);
-         System.out.println("Se asigno el vehiculo con dominio: " + dom +" a: " + dni);
-        }
-        
-        }
-    
+    }
+
     public Vehiculo getVehiculo(String dom){
     ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
     Vehiculo v = null;
@@ -197,18 +183,18 @@ private DB db = new LocalDB();
         return v;
     }
             
-    public boolean checkDominio(String dom){
-     ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
-        boolean result= false;
-        
+    public boolean checkDominio(String dom) {
+        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
+        boolean result = false;
+
         listaVehiculo = db.getListaVehiculo();
-        
+
         for (int i = 0; i < listaVehiculo.size(); i++) {
-            if (dom.equals(listaVehiculo.get(i).getDominio())){
+            if (dom.equals(listaVehiculo.get(i).getDominio())) {
                 result = true;
                 break;
             }
-            }
+        }
         return result;
     }
     
@@ -227,6 +213,36 @@ private DB db = new LocalDB();
                 break;
         }
         listaVehiculo.add(V);
+    }
+    
+    public void abAbono(int dni){
+        
+        ArrayList<Estacionamiento.Propietario> listaPropietario;
+  
+        listaPropietario = db.getListaPropietario();
+
+        if (checkUser(dni)) {
+            for (int i = 0; i < listaPropietario.size(); i++) {
+               if (dni == listaPropietario.get(i).getDni()) {
+                 System.out.print("Desea activar el abono?(S/N): ");
+                 listaPropietario.get(i).setAbono(true);
+                         
+            }
+        }
+            
+            
+            
+            
+            
+           
+           
+        } else {
+            System.out.print("Nombre del propietario: ");
+            String apellidoNombre = Utils.readStringCLI();
+
+            Propietario prop = new Propietario(apellidoNombre, dni);
+            listaPropietario.add(prop);
+        }
     }
 
 }
