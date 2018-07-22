@@ -10,13 +10,13 @@ import DataBase.LocalDB;
 import Estacionamiento.Vehiculo.Tipo;
 import java.util.ArrayList;
 
-
 /**
  *
  * @author Admin
  */
 public class AdmEstacionamiento {
 private DB db = new LocalDB();
+int posicionDni;
 
     public void printMenu() {
         System.out.print("Menu\n\n"
@@ -37,7 +37,8 @@ private DB db = new LocalDB();
                 agregarVehiculo();
                 break;
             case 3:
-                abAbono();
+                Propietario P = null;
+                abAbono(P);
                 break;
             case 4:
                 salir = true;
@@ -56,17 +57,16 @@ private DB db = new LocalDB();
             option = Utils.readIntCLI();
             cmd = runCommand(option);
         } while (!cmd);
-
     }
 
     private boolean checkUser(int dni) {
         ArrayList<Propietario> listaPropietario; //declaro lista
-        boolean result = false;
-
         listaPropietario = db.getListaPropietario();
 
+        boolean result = false;
         for (int i = 0; i < listaPropietario.size(); i++) {
             if (dni == listaPropietario.get(i).getDni()) {
+                posicionDni = i;
                 result = true;
                 break;
             }
@@ -81,7 +81,6 @@ private DB db = new LocalDB();
     }
     private void agregarDniProp(int dni) {
         ArrayList<Estacionamiento.Propietario> listaPropietario;
-
         listaPropietario = db.getListaPropietario();
 
         if (checkUser(dni)) {
@@ -159,7 +158,6 @@ private DB db = new LocalDB();
                 default:
                     return;
             }
-
             cargaVehiculo(mod, mar, dom, tipo, dni);
             System.out.println("La registracion del vehiculo fue exitosa");
         } else {
@@ -215,33 +213,20 @@ private DB db = new LocalDB();
         listaVehiculo.add(V);
     }
     
-    public void abAbono(int dni){
+    public void abAbono(Propietario P){
         
         ArrayList<Estacionamiento.Propietario> listaPropietario;
   
         listaPropietario = db.getListaPropietario();
 
         if (checkUser(dni)) {
-            for (int i = 0; i < listaPropietario.size(); i++) {
-               if (dni == listaPropietario.get(i).getDni()) {
                  System.out.print("Desea activar el abono?(S/N): ");
-                 listaPropietario.get(i).setAbono(true);
-                         
+                 boolean valorAbono;
+                 valorAbono = listaPropietario.get(posicionDni).isAbono();
+                 if(valorAbono){
+                    listaPropietario.get(posicionDni).setAbono(true);
+                    System.out.println("Abono activado " + valorAbono);
             }
-        }
-            
-            
-            
-            
-            
-           
-           
-        } else {
-            System.out.print("Nombre del propietario: ");
-            String apellidoNombre = Utils.readStringCLI();
-
-            Propietario prop = new Propietario(apellidoNombre, dni);
-            listaPropietario.add(prop);
         }
     }
 
