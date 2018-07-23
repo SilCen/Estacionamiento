@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class AdmEstacionamiento {
 private DB db = new LocalDB();
 int posicionDni;
+int dni = 0;
 
     public void printMenu() {
         System.out.print("Menu\n\n"
@@ -76,7 +77,7 @@ int posicionDni;
     
     private void agregarPropietario() {
         System.out.print("Ingrese DNI: ");
-        int dni = Utils.readIntCLI();
+        dni = Utils.readIntCLI();
         agregarDniProp(dni);
     }
     private void agregarDniProp(int dni) {
@@ -220,11 +221,11 @@ int posicionDni;
         listaPropietario = db.getListaPropietario();
 
         if (checkUser(dni)) {
-                 System.out.print("Desea activar el abono?(S/N): ");
+                 System.out.println("Desea activar el abono?(S/N): ");
                  boolean valorAbono;
-                 valorAbono = listaPropietario.get(posicionDni).isAbono();
-                 if(valorAbono){
+                 if(listaPropietario.get(posicionDni).isAbono() == false){
                     listaPropietario.get(posicionDni).setAbono(true);
+                    valorAbono = true;
                     System.out.println("Abono activado " + valorAbono);
             }
         }
