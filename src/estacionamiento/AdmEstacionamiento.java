@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class AdmEstacionamiento {
 private DB db = new LocalDB();
 int posicionDni;
-int dni = 0;
 
     public void printMenu() {
         System.out.print("Menu\n\n"
@@ -38,8 +37,7 @@ int dni = 0;
                 agregarVehiculo();
                 break;
             case 3:
-                Propietario P = null;
-                abAbono(P);
+                abAbono();
                 break;
             case 4:
                 salir = true;
@@ -77,7 +75,7 @@ int dni = 0;
     
     private void agregarPropietario() {
         System.out.print("Ingrese DNI: ");
-        dni = Utils.readIntCLI();
+        int dni = Utils.readIntCLI();
         agregarDniProp(dni);
     }
     private void agregarDniProp(int dni) {
@@ -214,12 +212,13 @@ int dni = 0;
         listaVehiculo.add(V);
     }
     
-    public void abAbono(Propietario P){
+    public void abAbono(){
         
         ArrayList<Estacionamiento.Propietario> listaPropietario;
   
         listaPropietario = db.getListaPropietario();
-
+        System.out.print("Ingrese DNI: ");
+        int dni = Utils.readIntCLI();
         if (checkUser(dni)) {
                  System.out.println("Desea activar el abono?(S/N): ");
                  boolean valorAbono;
@@ -227,7 +226,9 @@ int dni = 0;
                     listaPropietario.get(posicionDni).setAbono(true);
                     valorAbono = true;
                     System.out.println("Abono activado " + valorAbono);
-            }
+                 }else{
+                     
+                 }
         }
     }
 
