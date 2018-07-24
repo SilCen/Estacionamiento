@@ -15,8 +15,8 @@ import java.util.ArrayList;
  * @author Admin
  */
 public class AdmEstacionamiento {
-private DB db = new LocalDB();
-int posicionDni;
+
+    private DB db = new LocalDB();
 
     public void printMenu() {
         System.out.print("Menu\n\n"
@@ -58,26 +58,30 @@ int posicionDni;
         } while (!cmd);
     }
 
-    private boolean checkUser(int dni) {
+    private int getUserPosition(int dni) {
         ArrayList<Propietario> listaPropietario; //declaro lista
         listaPropietario = db.getListaPropietario();
 
-        boolean result = false;
+        int result = -1;
         for (int i = 0; i < listaPropietario.size(); i++) {
             if (dni == listaPropietario.get(i).getDni()) {
-                posicionDni = i;
-                result = true;
+                result = i;
                 break;
             }
         }
         return result;
     }
-    
+
+    private boolean checkUser(int dni) {
+        return (getUserPosition(dni) >= 0);
+    }
+
     private void agregarPropietario() {
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
         agregarDniProp(dni);
     }
+
     private void agregarDniProp(int dni) {
         ArrayList<Estacionamiento.Propietario> listaPropietario;
         listaPropietario = db.getListaPropietario();
@@ -92,7 +96,7 @@ int posicionDni;
             listaPropietario.add(prop);
         }
     }
-    
+
     private boolean checkVehiculo(String dom, int dni) {
         ArrayList<Vehiculo> listaVehiculo; //declaro lista
         boolean result = false;
@@ -166,20 +170,20 @@ int posicionDni;
         }
     }
 
-    public Vehiculo getVehiculo(String dom){
-    ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
-    Vehiculo v = null;
-    listaVehiculo = db.getListaVehiculo();
-        
+    public Vehiculo getVehiculo(String dom) {
+        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
+        Vehiculo v = null;
+        listaVehiculo = db.getListaVehiculo();
+
         for (int i = 0; i < listaVehiculo.size(); i++) {
-            if (dom.equals(listaVehiculo.get(i).getDominio())){
+            if (dom.equals(listaVehiculo.get(i).getDominio())) {
                 v = listaVehiculo.get(i);
                 break;
             }
-            }
+        }
         return v;
     }
-            
+
     public boolean checkDominio(String dom) {
         ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
         boolean result = false;
@@ -194,12 +198,12 @@ int posicionDni;
         }
         return result;
     }
-    
+
     public void cargaVehiculo(String mod, String mar, String dom, Tipo coso, int propId) {
         ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
         Vehiculo V = null;
 
-        listaVehiculo = db.getListaVehiculo(); 
+        listaVehiculo = db.getListaVehiculo();
 
         switch (coso) {
             case AUTO:
@@ -211,25 +215,34 @@ int posicionDni;
         }
         listaVehiculo.add(V);
     }
-    
-    public void abAbono(){
-        
+
+    public void abAbono() {
         ArrayList<Estacionamiento.Propietario> listaPropietario;
-  
         listaPropietario = db.getListaPropietario();
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
-        if (checkUser(dni)) {
-                 System.out.println("Desea activar el abono?(S/N): ");
-                 boolean valorAbono;
-                 if(listaPropietario.get(posicionDni).isAbono() == false){
-                    listaPropietario.get(posicionDni).setAbono(true);
-                    valorAbono = true;
-                    System.out.println("Abono activado " + valorAbono);
-                 }else{
-                     
-                 }
+        int posicionDni = getUserPosition(dni);
+        if (posicionDni < 0) {
+            System.out.println("El propietario no existe ");
+            return;
         }
+        boolean isAbono = listaPropietario.get(posicionDni).isAbono();
+
+        if (isAbono) {
+            System.out.println("El Propietario tiene abono activado, desea desactivarlo? (Si/No)");
+        } else {
+            System.out.println("El Propietario tiene abono desactivado, desea activarlo? (Si/No)");
+        }
+        if (Utils.readStringCLI().equals("Si")) {
+            if (isAbono) {
+                listaPropietario.get(posicionDni).setAbono(false);
+                System.out.println("Abono desactivado ");
+            } else {
+                listaPropietario.get(posicionDni).setAbono(true);
+                System.out.println("Abono activado ");
+            }
+        }
+
     }
 
 }
