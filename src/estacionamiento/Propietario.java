@@ -15,7 +15,6 @@ public class Propietario {
 
     private String ApeNomPropietario;
     private int DniPropietario;
-    private ArrayList<Vehiculo> listaVehiculo;
     private boolean abono;
     
     public Propietario (String ApeNomPropietario, int DniPropietario){

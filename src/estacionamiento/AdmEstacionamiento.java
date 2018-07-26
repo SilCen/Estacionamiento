@@ -23,7 +23,8 @@ public class AdmEstacionamiento {
                 + "1-Agregar Propietario\n"
                 + "2-Agregar Vehiculo\n"
                 + "3-AB de Abono\n"
-                + "4-Salir\n"
+                + "4-Cobrar Estacionamiento\n"
+                + "5-Salir\n"
                 + "Ingrese opcion: ");
     }
 
@@ -40,6 +41,9 @@ public class AdmEstacionamiento {
                 abAbono();
                 break;
             case 4:
+                cobrarEstacionamiento();
+                break;
+            case 5:
                 salir = true;
                 break;
             default:
@@ -129,7 +133,11 @@ public class AdmEstacionamiento {
             System.out.println("Este vehiculo ya ha sido registrado con este propietario (DNI): " + dni + " Dominio: " + dom);
             return;
         }
+        altaDomDni(dom, dni);
 
+    }
+
+    public void altaDomDni(String dom, int dni) {
         if (!checkDominio(dom)) {
             System.out.println("Ingrese el modelo: ");
             String mod = Utils.readStringCLI();
@@ -243,6 +251,38 @@ public class AdmEstacionamiento {
             }
         }
 
+    }
+
+    public void cobrarEstacionamiento() {
+        ArrayList<Estacionamiento.Propietario> listaPropietario;
+        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
+        System.out.print("Ingrese DNI: ");
+        int dni = Utils.readIntCLI();
+
+        listaPropietario = db.getListaPropietario();
+
+        if (checkUser(dni)) {
+            System.out.println("Usuario existente: " + dni);
+            int posicionDni = getUserPosition(dni);
+            boolean isAbono = listaPropietario.get(posicionDni).isAbono();
+            System.out.print("Ingrese Dominio: ");
+            String dom = Utils.readStringCLI();
+            boolean existeDom = checkVehiculo(dom, dni);
+            if(!existeDom){
+                altaDomDni(dom,dni);
+            }
+            Vehiculo v = getVehiculo(dom);          
+            Tipo devTipo = v.getTipo();
+            if (isAbono) {
+                System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
+            }
+            else{
+                System.out.println("Cobramos precio sin Abono de tipo: "+ devTipo);
+            }
+        }
+        else {
+            System.out.println("Usuario no existte");
+       }
     }
 
 }
