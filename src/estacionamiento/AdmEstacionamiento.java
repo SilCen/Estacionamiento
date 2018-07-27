@@ -62,22 +62,8 @@ public class AdmEstacionamiento {
         } while (!cmd);
     }
 
-    private int getUserPosition(int dni) {
-        ArrayList<Propietario> listaPropietario; //declaro lista
-        listaPropietario = db.getListaPropietario();
-
-        int result = -1;
-        for (int i = 0; i < listaPropietario.size(); i++) {
-            if (dni == listaPropietario.get(i).getDni()) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
     private boolean checkUser(int dni) {
-        return (getUserPosition(dni) >= 0);
+        return (db.getUser(dni) != null);
     }
 
     private void agregarPropietario() {
@@ -134,11 +120,10 @@ public class AdmEstacionamiento {
             return;
         }
         altaDomDni(dom, dni);
-
     }
 
     public void altaDomDni(String dom, int dni) {
-        if (!checkDominio(dom)) {
+        if (!db.checkDominio(dom)) {
             System.out.println("Ingrese el modelo: ");
             String mod = Utils.readStringCLI();
             System.out.println("Ingrese la marca: ");
@@ -172,39 +157,10 @@ public class AdmEstacionamiento {
             cargaVehiculo(mod, mar, dom, tipo, dni);
             System.out.println("La registracion del vehiculo fue exitosa");
         } else {
-            Vehiculo v = getVehiculo(dom);
+            Vehiculo v = db.getVehiculo(dom);
             cargaVehiculo(v.getModelo(), v.getMarca(), dom, v.getTipo(), dni);
             System.out.println("Se asigno el vehiculo con dominio: " + dom + " a: " + dni);
         }
-    }
-
-    public Vehiculo getVehiculo(String dom) {
-        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
-        Vehiculo v = null;
-        listaVehiculo = db.getListaVehiculo();
-
-        for (int i = 0; i < listaVehiculo.size(); i++) {
-            if (dom.equals(listaVehiculo.get(i).getDominio())) {
-                v = listaVehiculo.get(i);
-                break;
-            }
-        }
-        return v;
-    }
-
-    public boolean checkDominio(String dom) {
-        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
-        boolean result = false;
-
-        listaVehiculo = db.getListaVehiculo();
-
-        for (int i = 0; i < listaVehiculo.size(); i++) {
-            if (dom.equals(listaVehiculo.get(i).getDominio())) {
-                result = true;
-                break;
-            }
-        }
-        return result;
     }
 
     public void cargaVehiculo(String mod, String mar, String dom, Tipo coso, int propId) {
@@ -225,16 +181,15 @@ public class AdmEstacionamiento {
     }
 
     public void abAbono() {
-        ArrayList<Estacionamiento.Propietario> listaPropietario;
-        listaPropietario = db.getListaPropietario();
+        Propietario prop;
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
-        int posicionDni = getUserPosition(dni);
-        if (posicionDni < 0) {
+        prop = db.getUser(dni);
+        if (prop == null) {
             System.out.println("El propietario no existe ");
             return;
         }
-        boolean isAbono = listaPropietario.get(posicionDni).isAbono();
+        boolean isAbono = prop.isAbono();
 
         if (isAbono) {
             System.out.println("El Propietario tiene abono activado, desea desactivarlo? (Si/No)");
@@ -243,35 +198,30 @@ public class AdmEstacionamiento {
         }
         if (Utils.readStringCLI().equals("Si")) {
             if (isAbono) {
-                listaPropietario.get(posicionDni).setAbono(false);
+                prop.setAbono(false);
                 System.out.println("Abono desactivado ");
             } else {
-                listaPropietario.get(posicionDni).setAbono(true);
+                prop.setAbono(true);
                 System.out.println("Abono activado ");
             }
         }
-
-    }
+   }
 
     public void cobrarEstacionamiento() {
-        ArrayList<Estacionamiento.Propietario> listaPropietario;
-        ArrayList<Estacionamiento.Vehiculo> listaVehiculo;
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
-
-        listaPropietario = db.getListaPropietario();
-
-        if (checkUser(dni)) {
+        Propietario prop = db.getUser(dni);
+      
+        if (prop != null) {
             System.out.println("Usuario existente: " + dni);
-            int posicionDni = getUserPosition(dni);
-            boolean isAbono = listaPropietario.get(posicionDni).isAbono();
+            boolean isAbono = prop.isAbono();
             System.out.print("Ingrese Dominio: ");
             String dom = Utils.readStringCLI();
             boolean existeDom = checkVehiculo(dom, dni);
             if(!existeDom){
                 altaDomDni(dom,dni);
             }
-            Vehiculo v = getVehiculo(dom);          
+            Vehiculo v = db.getVehiculo(dom);          
             Tipo devTipo = v.getTipo();
             if (isAbono) {
                 System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
@@ -284,5 +234,4 @@ public class AdmEstacionamiento {
             System.out.println("Usuario no existte");
        }
     }
-
 }

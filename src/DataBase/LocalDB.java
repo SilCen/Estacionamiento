@@ -25,4 +25,32 @@ public class LocalDB extends DB{
         return listaPropietario;
     }
     
+    public boolean checkDominio(String dom) {
+        return getVehiculo(dom)!=null;
+    }
+    
+     public Vehiculo getVehiculo(String dom) {
+        Vehiculo v = null;
+
+        for (int i = 0; i < listaVehiculo.size(); i++) {
+            if (dom.equals(listaVehiculo.get(i).getDominio())) {
+                v = listaVehiculo.get(i);
+                break;
+            }
+        }
+        return v;
+    }
+     
+     public Propietario getUser(int dni) {
+       Propietario P = null;
+       
+        for (int i = 0; i < listaPropietario.size(); i++) {
+            if (dni == listaPropietario.get(i).getDni()) {
+                P = listaPropietario.get(i);
+                break;
+            }
+        }
+        return P;
+    }
+
 }
