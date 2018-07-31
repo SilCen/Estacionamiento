@@ -14,10 +14,7 @@ import java.util.ArrayList;
  * @author Admin
  */
 public abstract class DB {
-    abstract public ArrayList<Vehiculo>getListaVehiculo();
-    abstract public ArrayList<Propietario>getListaPropietario();
-    abstract public boolean checkDominio(String dom);
-    abstract public Vehiculo getVehiculo(String dom);
+    abstract public ArrayList<Vehiculo> getVehiculo(String dom);
     abstract public Propietario getUser(int dni);
     abstract public void addPropietario(Propietario prop);
     abstract public void addVehiculo(Vehiculo v);

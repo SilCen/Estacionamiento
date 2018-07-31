@@ -7,6 +7,7 @@ package DataBase;
 
 import Estacionamiento.Vehiculo;
 import Estacionamiento.Propietario;
+import Estacionamiento.Utils;
 import java.util.ArrayList;
 
 /**
@@ -17,28 +18,15 @@ public class LocalDB extends DB{
     private static ArrayList<Vehiculo> listaVehiculo = new ArrayList();
     private static ArrayList<Propietario> listaPropietario = new ArrayList();
     
-    public ArrayList<Vehiculo>getListaVehiculo(){
-        return listaVehiculo;
-    }
-    
-    public ArrayList<Propietario>getListaPropietario(){
-        return listaPropietario;
-    }
-    
-    public boolean checkDominio(String dom) {
-        return getVehiculo(dom)!=null;
-    }
-    
-     public Vehiculo getVehiculo(String dom) {
-        Vehiculo v = null;
+    public ArrayList<Vehiculo> getVehiculo(String dom) {
+       ArrayList<Vehiculo> lista = new ArrayList();
 
         for (int i = 0; i < listaVehiculo.size(); i++) {
             if (dom.equals(listaVehiculo.get(i).getDominio())) {
-                v = listaVehiculo.get(i);
-                break;
+                lista.add(listaVehiculo.get(i));
             }
         }
-        return v;
+        return lista;
     }
      
      public Propietario getUser(int dni) {
@@ -52,5 +40,13 @@ public class LocalDB extends DB{
         }
         return P;
     }
+     
+     public void addPropietario(Propietario prop) {
+        listaPropietario.add(prop);
+    }
+     
+     public void addVehiculo(Vehiculo v){
+         listaVehiculo.add(v);
+     }
 
 }
