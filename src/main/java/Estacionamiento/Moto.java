@@ -5,14 +5,22 @@
  */
 package Estacionamiento;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 /**
  *
  * @author Admin
  */
+@Entity
+@DiscriminatorValue("MOTO")
 public class Moto extends Vehiculo {
+
+    public Moto() {
+    }
         
-    public Moto (String modelo, String marca, String dominio, int propId){
-        super (modelo, marca, dominio, propId, Tipo.MOTO);
+    public Moto (String modelo, String marca, String dominio){
+        super (modelo, marca, dominio, Tipo.MOTO);
             
     }
     

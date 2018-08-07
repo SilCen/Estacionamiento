@@ -86,14 +86,15 @@ public class AdmEstacionamiento {
         boolean result = false;
 
         listaVehiculo = db.getVehiculo(dom);
-
-        for (int i = 0; i < listaVehiculo.size(); i++) {
-            if (dni == listaVehiculo.get(i).getPropId()) 
-            {
-                result = true;
-                break;
-            }
+        System.out.println("REPARAR LOGICA>>>>>>>>>>>>>>>>>>>>>>>>>");
+        /*for (int i = 0; i < listaVehiculo.size(); i++) {
+        if (dni == listaVehiculo.get(i).getPropId())
+        {
+        result = true;
+        break;
         }
+        }*/
+        
         return result;
     }
 
@@ -150,25 +151,25 @@ public class AdmEstacionamiento {
                 default:
                     return;
             }
-            cargaVehiculo(mod, mar, dom, tipo, dni);
+            cargaVehiculo(mod, mar, dom, tipo);
             System.out.println("La registracion del vehiculo fue exitosa");
         } else {
             Vehiculo v = lista.get(0);
-            cargaVehiculo(v.getModelo(), v.getMarca(), dom, v.getTipo(), dni);
+            cargaVehiculo(v.getModelo(), v.getMarca(), dom, v.getTipo());
             System.out.println("Se asigno el vehiculo con dominio: " + dom + " a: " + dni);
         }
     }
 
-    public void cargaVehiculo(String mod, String mar, String dom, Tipo coso, int propId) {
+    public void cargaVehiculo(String mod, String mar, String dom, Tipo coso) {
      
         Vehiculo V = null;
 
         switch (coso) {
             case AUTO:
-                V = new Auto(mod, mar, dom, propId);
+                V = new Auto(mod, mar, dom);
                 break;
             case MOTO:
-                V = new Moto(mod, mar, dom, propId);
+                V = new Moto(mod, mar, dom);
                 break;
         }
         db.addVehiculo(V);

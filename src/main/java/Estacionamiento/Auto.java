@@ -5,13 +5,21 @@
  */
 package Estacionamiento;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 /**
  *
  * @author Admin
  */
+@Entity
+@DiscriminatorValue("AUTO")
 public class Auto extends Vehiculo {
+
+    public Auto() {
+    }
    
-    public Auto (String modelo, String marca, String dominio, int propId){
-        super (modelo, marca, dominio, propId, Tipo.AUTO);
+    public Auto (String modelo, String marca, String dominio){
+        super (modelo, marca, dominio, Tipo.AUTO);
    }
 }

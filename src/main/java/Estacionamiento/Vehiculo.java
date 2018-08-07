@@ -5,24 +5,49 @@
  */
 package Estacionamiento;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 /**
  *
  * @author Admin
  */
-public class Vehiculo {
-    private String modelo;
-    private String marca;
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "HibernateType")
+public class Vehiculo implements Serializable {
+    @Id
+    @Column
     private String dominio;
-    private int propId;
+    @Column
+    private String modelo;
+    @Column
+    private String marca;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name="Tipo")
     private Tipo coso;
     public enum Tipo {AUTO, MOTO};
     
-    protected Vehiculo(String modelo, String marca, String dominio, int propId, Tipo coso){
+    protected Vehiculo(String modelo, String marca, String dominio, Tipo coso){
         this.modelo = modelo;
         this.marca = marca;
         this.dominio = dominio;
-        this.propId = propId;
         this.coso = coso;
+    }
+
+    public Vehiculo() {
+    }
+
+    @Override
+    public String toString() {
+        return getCoso() +"{" + "dominio=" + getDominio() + ", modelo=" + getModelo() + ", marca=" + getMarca() + '}';
     }
 
     /**
@@ -46,11 +71,42 @@ public class Vehiculo {
         return dominio;
     }
     
-    public int getPropId(){
-    return propId; 
-    }
-    
     public Tipo getTipo(){
-    return coso;
+    return getCoso();
+    }
+
+    /**
+     * @param dominio the dominio to set
+     */
+    public void setDominio(String dominio) {
+        this.dominio = dominio;
+    }
+
+    /**
+     * @param modelo the modelo to set
+     */
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    /**
+     * @param marca the marca to set
+     */
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    /**
+     * @return the coso
+     */
+    public Tipo getCoso() {
+        return coso;
+    }
+
+    /**
+     * @param coso the coso to set
+     */
+    public void setCoso(Tipo coso) {
+        this.coso = coso;
     }
 }
