@@ -47,7 +47,8 @@ public class MySqlConnector2 implements DB{
     }
     public static void Close() {
         connections--;
-        if (connections == 0) {
+        if (connections <= 0) {
+            connections = 0 ;
             try {
                 conn.close();
             } catch (SQLException ex) {
