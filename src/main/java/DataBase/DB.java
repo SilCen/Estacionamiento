@@ -13,11 +13,11 @@ import java.util.ArrayList;
  *
  * @author Admin
  */
-public abstract class DB {
-    abstract public ArrayList<Vehiculo> getVehiculo(String dom);
-    abstract public Propietario getUser(int dni);
-    abstract public void addPropietario(Propietario prop);
-    abstract public void addVehiculo(Vehiculo v);
+public abstract interface DB {
+    public ArrayList<Vehiculo> getVehiculo(String dom);
+    public Propietario getUser(int dni);
+    public void addPropietario(Propietario prop);
+    public void addVehiculo(Vehiculo v);
     }
 
 

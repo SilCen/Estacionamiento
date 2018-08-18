@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Admin
  */
-public class LocalDB extends DB{
+public class LocalDB implements DB{
     private static ArrayList<Vehiculo> listaVehiculo = new ArrayList();
     private static ArrayList<Propietario> listaPropietario = new ArrayList();
     

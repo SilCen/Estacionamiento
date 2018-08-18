@@ -5,6 +5,7 @@
  */
 package Inicio;
 
+import DataBase.MySqlConnector2;
 import DataBase.VehiculoJpaController;
 import Estacionamiento.AdmEstacionamiento;
 import Estacionamiento.Auto;
@@ -22,7 +23,7 @@ public class Main {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception, Throwable {
-      
+        /*
         Vehiculo v = new Moto("modelo1", "Marca1", "A");
         Vehiculo v2 = new Auto("modelo1", "Marca1", "B");
         
@@ -30,8 +31,14 @@ public class Main {
         vjc.add(v);
         vjc.add(v2);
         vjc.finalize();
+        
+        */
+        
+        MySqlConnector2.Init();
+        MySqlConnector2.excetute("select * from vehiculo");
+        MySqlConnector2.Close();
+        
+    }
       //AdmEstacionamiento consola = new AdmEstacionamiento();
       //consola.runMenu();
-    }
-    
-}
+    }    
