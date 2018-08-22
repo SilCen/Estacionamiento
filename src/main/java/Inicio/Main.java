@@ -5,12 +5,14 @@
  */
 package Inicio;
 
+import DataBase.DB;
 import DataBase.MySqlConnector2;
 import DataBase.VehiculoJpaController;
 import Estacionamiento.AdmEstacionamiento;
 import Estacionamiento.Auto;
 import Estacionamiento.Moto;
 import Estacionamiento.Vehiculo;
+import java.util.ArrayList;
 
 /**
  *
@@ -34,9 +36,10 @@ public class Main {
         
         */
         
-        MySqlConnector2.Init();
-        MySqlConnector2.excetute("select * from vehiculo");
-        MySqlConnector2.Close();
+        DB db = new MySqlConnector2();
+        ArrayList<Vehiculo> list = db.getVehiculo("A");
+        System.out.println("ver2 " + list.get(0).getMarca());
+        
         
     }
       //AdmEstacionamiento consola = new AdmEstacionamiento();

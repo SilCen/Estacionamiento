@@ -6,7 +6,7 @@
 package Estacionamiento;
 
 import DataBase.DB;
-import DataBase.LocalDB;
+import DataBase.MySqlConnector2;
 import Estacionamiento.Vehiculo.Tipo;
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class AdmEstacionamiento {
 
-    private DB db = new LocalDB();
+    private DB db = new MySqlConnector2();
 
     public void printMenu() {
         System.out.print("Menu\n\n"

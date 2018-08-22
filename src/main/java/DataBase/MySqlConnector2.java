@@ -6,8 +6,11 @@
 package DataBase;
 
 
+import Estacionamiento.Auto;
+import Estacionamiento.Moto;
 import Estacionamiento.Propietario;
 import Estacionamiento.Vehiculo;
+import Estacionamiento.Vehiculo.Tipo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Connection;
@@ -57,67 +60,71 @@ public class MySqlConnector2 implements DB{
         }
     }
 
-    public static void excetute(String query)
-    {
+    public static ResultSet execute(String query) {
 // assume that conn is an already created JDBC connection (see previous examples)
 
-Statement stmt = null;
-ResultSet rs = null;
+        Statement stmt = null;
+        ResultSet rs = null;
 
-try {
-    stmt = conn.createStatement();
-    //rs = stmt.executeQuery(query);
-    // or alternatively, if you don't know ahead of time that
-    // the query will be a SELECT...
-
-    if (stmt.execute(query)) {
-        rs = stmt.getResultSet();
-    }
-
-    while(rs.next())
-    {
-        
-        System.out.println("Dominio: " + rs.getString("dominio"));
-        System.out.println("Modelo: " + rs.getString("modelo"));
-        System.out.println("Marca: " + rs.getString("marca"));
-        
-    }
-    
-    // Now do something with the ResultSet ....
-}
-catch (SQLException ex){
-    // handle any errors
-    System.out.println("SQLException: " + ex.getMessage());
-    System.out.println("SQLState: " + ex.getSQLState());
-    System.out.println("VendorError: " + ex.getErrorCode());
-}
-finally {
-    // it is a good idea to release
-    // resources in a finally{} block
-    // in reverse-order of their creation
-    // if they are no-longer needed
-
-    if (rs != null) {
         try {
-            rs.close();
-        } catch (SQLException sqlEx) { } // ignore
+            stmt = conn.createStatement();
+            //rs = stmt.executeQuery(query);
+            // or alternatively, if you don't know ahead of time that
+            // the query will be a SELECT...
 
-        rs = null;
-    }
+            if (stmt.execute(query)) {
+                rs = stmt.getResultSet();
+            }
 
-    if (stmt != null) {
-        try {
-            stmt.close();
-        } catch (SQLException sqlEx) { } // ignore
-
-        stmt = null;
-    }
-}
+        } catch (SQLException ex) {
+            // handle any errors
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
+            // it is a good idea to release
+            // resources in a finally{} block
+            // in reverse-order of their creation
+            // if they are no-longer needed
+        }
+        return rs;
     }
 
     @Override
     public ArrayList<Vehiculo> getVehiculo(String dom) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       ArrayList<Vehiculo> list = new ArrayList();
+       ResultSet rs;
+        Init();
+        
+        rs = execute("SELECT * FROM vehiculo " +
+                     "where dominio = '"+ dom +"'");
+        
+        try {
+            while (rs.next()) {
+                Vehiculo V= null;
+                Tipo coso = Tipo.values()[rs.getInt("Tipo")];
+                String mod = rs.getString("modelo");
+                String mar = rs.getString("marca");
+
+                switch (coso) {
+                    case AUTO:
+                        V = new Auto(mod, mar, dom);
+                        break;
+                    case MOTO:
+                        V = new Moto(mod, mar, dom);
+                        break;
+                }
+                
+                list.add(V);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+        Close();
+        return list;
     }
 
     @Override
