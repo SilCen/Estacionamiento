@@ -29,12 +29,12 @@ public class Propietario {
    
     public boolean ingresoPropietario(){
         Calendar hoy = Calendar.getInstance();
-        if(ultimoIngreso.get(Calendar.YEAR) == hoy.get(Calendar.YEAR) &&
-                ultimoIngreso.get(Calendar.MONTH) == hoy.get(Calendar.MONTH) &&
-                ultimoIngreso.get(Calendar.DAY_OF_MONTH) == hoy.get(Calendar.DAY_OF_MONTH)){
+        if(getUltimoIngreso().get(Calendar.YEAR) == hoy.get(Calendar.YEAR) &&
+                getUltimoIngreso().get(Calendar.MONTH) == hoy.get(Calendar.MONTH) &&
+                getUltimoIngreso().get(Calendar.DAY_OF_MONTH) == hoy.get(Calendar.DAY_OF_MONTH)){
            return true;
         }
-        ultimoIngreso = hoy;
+        setUltimoIngreso(hoy);
         return false;
     }
 
@@ -79,5 +79,20 @@ public class Propietario {
     public void setDniPropietario(int DniPropietario) {
         this.DniPropietario = DniPropietario;
     }
+
+    /**
+     * @return the ultimoIngreso
+     */
+    public Calendar getUltimoIngreso() {
+        return ultimoIngreso;
+    }
+
+    /**
+     * @param ultimoIngreso the ultimoIngreso to set
+     */
+    public void setUltimoIngreso(Calendar ultimoIngreso) {
+        this.ultimoIngreso = ultimoIngreso;
+    }
+      
     
 }

@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 /**
  *
  * @author Renzo-PC
@@ -123,14 +125,45 @@ public class MySqlConnector2 implements DB{
         }
             
             
-        Close();
+        //Close();
         return list;
     }
-
+    
     @Override
     public Propietario getUser(int dni) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Propietario prop = null;
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+
+        rs = execute("SELECT * FROM propietario "
+                + "where idPropietario = " + dni);
+
+        try {
+            while (rs.next()) {
+                String ApeNomProp = rs.getString("ApeNom");
+                Boolean abono = rs.getBoolean("abono");
+                Date ultimoIngreso = rs.getDate("ultimoIngreso");
+                prop = new Propietario(ApeNomProp, dni);
+                prop.setAbono(abono);
+                if (ultimoIngreso != null) {
+                    Calendar calen = Calendar.getInstance();
+                    calen.setTime(ultimoIngreso); //aqui transformo de date a calen
+                    prop.setUltimoIngreso(calen); //seteo el ultimo ingreso
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Close();
+        return prop;
     }
+
+    //@Override
+    //public Propietario getUser(int dni) {
+    //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //}
 
     @Override
     public void addPropietario(Propietario prop) {

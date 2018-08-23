@@ -11,6 +11,7 @@ import DataBase.VehiculoJpaController;
 import Estacionamiento.AdmEstacionamiento;
 import Estacionamiento.Auto;
 import Estacionamiento.Moto;
+import Estacionamiento.Propietario;
 import Estacionamiento.Vehiculo;
 import java.util.ArrayList;
 
@@ -40,8 +41,11 @@ public class Main {
         ArrayList<Vehiculo> list = db.getVehiculo("A");
         System.out.println("ver2 " + list.get(0).getMarca());
         
-        
-    }
+        Propietario prop = db.getUser(1);
+        System.out.print(prop.getApeNomPropietario()); 
+                
       //AdmEstacionamiento consola = new AdmEstacionamiento();
       //consola.runMenu();
-    }    
+    }
+    }
+    
