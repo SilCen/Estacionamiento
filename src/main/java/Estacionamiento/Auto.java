@@ -22,4 +22,6 @@ public class Auto extends Vehiculo {
     public Auto (String modelo, String marca, String dominio){
         super (modelo, marca, dominio, Tipo.AUTO);
    }
+
+   
 }

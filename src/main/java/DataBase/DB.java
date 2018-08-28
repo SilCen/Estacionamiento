@@ -18,6 +18,7 @@ public abstract interface DB {
     public Propietario getUser(int dni);
     public void addPropietario(Propietario prop);
     public void addVehiculo(Vehiculo v);
+    public void addRelacion(Propietario prop, Vehiculo v);
     }
 
 

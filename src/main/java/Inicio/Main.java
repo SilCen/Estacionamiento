@@ -37,15 +37,23 @@ public class Main {
         
         */
         
-        DB db = new MySqlConnector2();
+        /*DB db = new MySqlConnector2();
         ArrayList<Vehiculo> list = db.getVehiculo("A");
         System.out.println("ver2 " + list.get(0).getMarca());
         
         Propietario prop = db.getUser(1);
-        System.out.print(prop.getApeNomPropietario()); 
-                
-      //AdmEstacionamiento consola = new AdmEstacionamiento();
-      //consola.runMenu();
+        System.out.print(prop.getApeNomPropietario());
+        
+        Propietario prop2 = new Propietario("Perez", 28);
+        db.addPropietario(prop2);
+        
+        Vehiculo v = new Auto("mod1","marc1","dom1");
+        db.addVehiculo(v);*/
+        
+        //System.out.print(prop.getApeNomPropietario()); 
+                        
+      AdmEstacionamiento consola = new AdmEstacionamiento();
+      consola.runMenu();
     }
     }
     

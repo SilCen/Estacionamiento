@@ -156,7 +156,7 @@ public class MySqlConnector2 implements DB{
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Close();
+        //Close();
         return prop;
     }
 
@@ -167,11 +167,33 @@ public class MySqlConnector2 implements DB{
 
     @Override
     public void addPropietario(Propietario prop) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String str = "insert into propietario (idPropietario, ApeNom, abono) values(%d, '%s', %d)";
+        // Concatenation of two strings
+        String datoprop = String.format(str, prop.getDni(), prop.getApeNomPropietario(), (prop.isAbono()) ? 1 : 0);
+        rs = execute(datoprop);
+        //Close();    
     }
 
     @Override
     public void addVehiculo(Vehiculo v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String str = "insert into vehiculo (modelo, dominio, marca, Tipo) values('%s', '%s', '%s', %d)";
+        // Concatenation of two strings
+        String datovehiculo = String.format(str, v.getModelo(), v.getDominio(), v.getMarca(), v.getTipo().ordinal());
+        rs = execute(datovehiculo);
+        //Close();    
+    }
+
+    @Override
+    public void addRelacion(Propietario prop, Vehiculo v) {
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "insert into propxv (id_Prop, id_Vehiculo) values(%d, '%s')";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, prop.getDni(), v.getDominio());
+        rs = execute(datorelacion);
     }
 }
