@@ -196,4 +196,45 @@ public class MySqlConnector2 implements DB{
         String datorelacion = String.format(relacion, prop.getDni(), v.getDominio());
         rs = execute(datorelacion);
     }
+
+    @Override
+    public boolean CheckRelacion(int dni, String dom) {
+        boolean exist=false;
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String consulta = "SELECT * FROM propxv where id_Prop = %d and id_Vehiculo = '%s'";
+        rs = execute(String.format(consulta,dni,dom));
+
+        try {
+            exist = rs.next();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Close();
+        return exist;
+    }
+
+    @Override
+    public void updateAbono(Propietario prop) {
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "UPDATE propietario SET abono = %d WHERE idPropietario = %d";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, (prop.isAbono()) ? 1 : 0, prop.getDni());
+        rs = execute(datorelacion);
+    }
+
+    @Override
+    public void updateIngreso(Propietario prop) {
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "UPDATE propietario SET ultimoIngreso = '%s' WHERE idPropietario = %d";
+        // Concatenation of two strings
+        String date = prop.getUltimoIngreso().getTime().toString();
+        
+        String datorelacion = String.format(relacion, date, prop.getDni());
+       // rs = execute(datorelacion);
+    }
 }

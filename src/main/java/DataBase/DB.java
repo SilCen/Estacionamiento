@@ -19,6 +19,9 @@ public abstract interface DB {
     public void addPropietario(Propietario prop);
     public void addVehiculo(Vehiculo v);
     public void addRelacion(Propietario prop, Vehiculo v);
+    public boolean CheckRelacion(int dni, String dom);
+    public void updateAbono(Propietario prop);
+    public void updateIngreso(Propietario prop);
     }
 
 

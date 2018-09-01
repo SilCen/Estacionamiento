@@ -83,22 +83,6 @@ public class AdmEstacionamiento {
         return prop;
     }
 
-   private boolean checkVehiculo(String dom, int dni) {
-        ArrayList<Vehiculo> listaVehiculo; //declaro lista
-        boolean result = false;
-
-        listaVehiculo = db.getVehiculo(dom);
-        System.out.println("REPARAR LOGICA>>>>>>>>>>>>>>>>>>>>>>>>>");
-        /*for (int i = 0; i < listaVehiculo.size(); i++) {
-        if (dni == listaVehiculo.get(i).getPropId())
-        {
-        result = true;
-        break;
-        }
-        }*/
-        return result;
-    }
-
    private void agregarVehiculo() {
         System.out.println("Ingrese el DNI del propietario: ");
         int dni = Utils.readIntCLI();
@@ -111,7 +95,7 @@ public class AdmEstacionamiento {
         System.out.println("Ingrese el dominio: ");
         String dom = Utils.readStringCLI();
 
-        if (checkVehiculo(dom, dni)) {
+        if (db.CheckRelacion(dni, dom)) {
             System.out.println("Este vehiculo ya ha sido registrado con este propietario (DNI): " + dni + " Dominio: " + dom);
             return;
         }
@@ -196,12 +180,15 @@ public class AdmEstacionamiento {
         }
         if (Utils.readStringCLI().equals("Si")) {
             if (isAbono) {
-                prop.setAbono(false);
+                isAbono = false;
                 System.out.println("Abono desactivado ");
             } else {
-                prop.setAbono(true);
+                isAbono = true;
                 System.out.println("Abono activado ");
             }
+
+            prop.setAbono(isAbono);
+            db.updateAbono(prop);
         }
    }
 
@@ -221,14 +208,14 @@ public class AdmEstacionamiento {
             boolean isAbono = prop.isAbono();
             System.out.print("Ingrese Dominio: ");
             String dom = Utils.readStringCLI();
-            boolean existeDom = checkVehiculo(dom, dni);
+            boolean existeDom = db.CheckRelacion(dni, dom);
             if(!existeDom){
                 altaDomDni(dom,prop);
             }
             lista = db.getVehiculo(dom);
             Vehiculo v = lista.get(0);          
             Tipo devTipo = v.getTipo();
-       
+            db.updateIngreso(prop);
             if (isAbono) {
                 System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
             }
