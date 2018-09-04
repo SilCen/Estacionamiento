@@ -22,6 +22,8 @@ public abstract interface DB {
     public boolean CheckRelacion(int dni, String dom);
     public void updateAbono(Propietario prop);
     public void updateIngreso(Propietario prop);
+    public void updateSaldo(Propietario prop, float saldo);
+    public float getSaldo(Propietario prop);
     }
 
 

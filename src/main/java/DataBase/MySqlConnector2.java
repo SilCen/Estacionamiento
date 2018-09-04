@@ -5,7 +5,6 @@
  */
 package DataBase;
 
-
 import Estacionamiento.Auto;
 import Estacionamiento.Moto;
 import Estacionamiento.Propietario;
@@ -21,11 +20,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
 /**
  *
  * @author Renzo-PC
  */
-public class MySqlConnector2 implements DB{
+public class MySqlConnector2 implements DB {
 
     private static Connection conn = null;
     private static int connections;
@@ -36,9 +36,9 @@ public class MySqlConnector2 implements DB{
         if (conn == null) {
             try {
                 conn = DriverManager.getConnection("jdbc:mysql://localhost/estacionamiento?"
-                                                    + "user=" + user
-                                                    + "&password=" + password
-                                                    + "&serverTimezone=UTC");
+                        + "user=" + user
+                        + "&password=" + password
+                        + "&serverTimezone=UTC");
 
             } catch (SQLException ex) {
                 // handle any errors
@@ -50,10 +50,11 @@ public class MySqlConnector2 implements DB{
         }
         connections++;
     }
+
     public static void Close() {
         connections--;
         if (connections <= 0) {
-            connections = 0 ;
+            connections = 0;
             try {
                 conn.close();
             } catch (SQLException ex) {
@@ -94,16 +95,16 @@ public class MySqlConnector2 implements DB{
 
     @Override
     public ArrayList<Vehiculo> getVehiculo(String dom) {
-       ArrayList<Vehiculo> list = new ArrayList();
-       ResultSet rs;
+        ArrayList<Vehiculo> list = new ArrayList();
+        ResultSet rs;
         Init();
-        
-        rs = execute("SELECT * FROM vehiculo " +
-                     "where dominio = '"+ dom +"'");
-        
+
+        rs = execute("SELECT * FROM vehiculo "
+                + "where dominio = '" + dom + "'");
+
         try {
             while (rs.next()) {
-                Vehiculo V= null;
+                Vehiculo V = null;
                 Tipo coso = Tipo.values()[rs.getInt("Tipo")];
                 String mod = rs.getString("modelo");
                 String mar = rs.getString("marca");
@@ -116,19 +117,18 @@ public class MySqlConnector2 implements DB{
                         V = new Moto(mod, mar, dom);
                         break;
                 }
-                
+
                 list.add(V);
 
             }
         } catch (SQLException ex) {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-            
+
         //Close();
         return list;
     }
-    
+
     @Override
     public Propietario getUser(int dni) {
         Propietario prop = null;
@@ -164,7 +164,6 @@ public class MySqlConnector2 implements DB{
     //public Propietario getUser(int dni) {
     //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     //}
-
     @Override
     public void addPropietario(Propietario prop) {
         ResultSet rs;
@@ -199,15 +198,15 @@ public class MySqlConnector2 implements DB{
 
     @Override
     public boolean CheckRelacion(int dni, String dom) {
-        boolean exist=false;
+        boolean exist = false;
         ResultSet rs;
         Init(); //es la funcion que inicializa la conex a la bd
         String consulta = "SELECT * FROM propxv where id_Prop = %d and id_Vehiculo = '%s'";
-        rs = execute(String.format(consulta,dni,dom));
+        rs = execute(String.format(consulta, dni, dom));
 
         try {
             exist = rs.next();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -224,6 +223,11 @@ public class MySqlConnector2 implements DB{
         // Concatenation of two strings
         String datorelacion = String.format(relacion, (prop.isAbono()) ? 1 : 0, prop.getDni());
         rs = execute(datorelacion);
+        
+        relacion = "INSERT INTO abono (propid, saldo) VALUES (%d, 0)";
+        // Concatenation of two strings
+        datorelacion = String.format(relacion, prop.getDni());
+        rs = execute(datorelacion);
     }
 
     @Override
@@ -233,8 +237,39 @@ public class MySqlConnector2 implements DB{
         String relacion = "UPDATE propietario SET ultimoIngreso = '%s' WHERE idPropietario = %d";
         // Concatenation of two strings
         String date = prop.getUltimoIngreso().getTime().toString();
-        
+
         String datorelacion = String.format(relacion, date, prop.getDni());
-       // rs = execute(datorelacion);
+        // rs = execute(datorelacion);
+    }
+
+    @Override
+    public void updateSaldo(Propietario prop, float saldo) {
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "UPDATE abono SET saldo = '%f' WHERE propid = %d";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, saldo, prop.getDni());
+        rs = execute(datorelacion);
+    }
+
+    @Override
+    public float getSaldo(Propietario prop) {
+        ResultSet rs;
+        float saldo = 0;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "SELECT saldo WHERE propid = %d";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, prop.getDni());
+        rs = execute(datorelacion);
+
+        try {
+            while (rs.next()) {
+                saldo = rs.getFloat("saldo");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return saldo;
     }
 }
