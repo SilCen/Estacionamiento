@@ -8,6 +8,7 @@ package DataBase;
 import Estacionamiento.Auto;
 import Estacionamiento.Moto;
 import Estacionamiento.Propietario;
+import Estacionamiento.Utils;
 import Estacionamiento.Vehiculo;
 import Estacionamiento.Vehiculo.Tipo;
 import java.util.logging.Level;
@@ -246,7 +247,7 @@ public class MySqlConnector2 implements DB {
     public void updateSaldo(Propietario prop, float saldo) {
         ResultSet rs;
         Init(); //es la funcion que inicializa la conex a la bd
-        String relacion = "UPDATE abono SET saldo = '%f' WHERE propid = %d";
+        String relacion = "UPDATE abono SET saldo = '%.2f' WHERE propid = %d";
         // Concatenation of two strings
         String datorelacion = String.format(relacion, saldo, prop.getDni());
         rs = execute(datorelacion);
@@ -257,13 +258,13 @@ public class MySqlConnector2 implements DB {
         ResultSet rs;
         float saldo = 0;
         Init(); //es la funcion que inicializa la conex a la bd
-        String relacion = "SELECT saldo WHERE propid = %d";
+        String relacion = "SELECT saldo FROM abono WHERE propid = %d";
         // Concatenation of two strings
         String datorelacion = String.format(relacion, prop.getDni());
         rs = execute(datorelacion);
 
         try {
-            while (rs.next()) {
+            if (rs.next()) {
                 saldo = rs.getFloat("saldo");
             }
 
@@ -271,5 +272,36 @@ public class MySqlConnector2 implements DB {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
         return saldo;
+    }
+
+    @Override
+    public void addPrecio(Float precio, Tipo tipo, Utils.Category categoria) {
+        //
+        ResultSet rs;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "INSERT INTO precio(precio, tipo_vehic, categoria) VALUES ('%s', %d, %d)";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, precio.toString(), tipo.ordinal(), categoria.ordinal());
+        rs = execute(datorelacion);    }
+
+    @Override
+    public float getPrecio(Tipo tipo, Utils.Category categoria) {
+        ResultSet rs;
+        float precio = 0;
+        Init(); //es la funcion que inicializa la conex a la bd
+        String relacion = "SELECT precio FROM precio WHERE tipo_vehic = %d and categoria = %d";
+        // Concatenation of two strings
+        String datorelacion = String.format(relacion, tipo.ordinal(), categoria.ordinal());
+        rs = execute(datorelacion);
+
+        try {
+            if (rs.next()) {
+                precio = rs.getFloat("precio");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return precio;
     }
 }

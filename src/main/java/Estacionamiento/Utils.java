@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class Utils {
     static private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     static private Scanner scanner = new Scanner(System.in);
-
+    public enum Category{conAbono, sinAbono, feriado};
     static public String readStringCLI() {
         String valor = "";
         try {
@@ -30,7 +30,11 @@ public class Utils {
         return valor;
     }
 
-    static public int readIntCLI() {
+    static public float readFloatCLI() {
+        return scanner.nextFloat();
+    }
+    
+     static public int readIntCLI() {
         return scanner.nextInt();
     }
   }

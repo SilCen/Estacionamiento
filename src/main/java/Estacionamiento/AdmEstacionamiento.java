@@ -24,7 +24,8 @@ public class AdmEstacionamiento {
                 + "2-Agregar Vehiculo\n"
                 + "3-AB de Abono\n"
                 + "4-Cobrar Estacionamiento\n"
-                + "5-Salir\n"
+                + "5-Cargar Precios\n"
+                + "6-Salir\n"
                 + "Ingrese opcion: ");
     }
 
@@ -45,6 +46,9 @@ public class AdmEstacionamiento {
                 cobrarEstacionamiento();
                 break;
             case 5:
+                cargarPrecio();
+                break;
+            case 6:
                 salir = true;
                 break;
             default:
@@ -216,15 +220,33 @@ public class AdmEstacionamiento {
             Vehiculo v = lista.get(0);          
             Tipo devTipo = v.getTipo();
             db.updateIngreso(prop);
+            float precio;
+            
             if (isAbono) {
+                precio = db.getPrecio(devTipo, Utils.Category.conAbono);
                 System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
+                System.out.printf("Valor : %.2f\n", precio);
+                System.out.printf("El saldo es: %.2f\n", db.getSaldo(prop));
             }
             else{
+                precio = db.getPrecio(devTipo, Utils.Category.sinAbono);
                 System.out.println("Cobramos precio sin Abono de tipo: "+ devTipo);
+                System.out.printf("Valor : %.2f\n", precio);
             }
         }
         else {
             System.out.println("Usuario no existte");
        }
+  }
+    
+    public void cargarPrecio(){
+        System.out.println("Ingrese tipo de vehículo: (0. AUTO - 1.MOTO)");
+        int tip_veh = Utils.readIntCLI();
+        System.out.println("Ingrese categoría: (0. Con Abono - 1. Sin Abono)");
+        int categ = Utils.readIntCLI();
+        System.out.println("Ingrese precio: ");
+        float precio = Utils.readFloatCLI();
+        db.addPrecio(precio, Tipo.values()[tip_veh], Utils.Category.values()[categ]);
     }
+    
 }

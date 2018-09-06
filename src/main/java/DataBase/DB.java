@@ -7,6 +7,7 @@ package DataBase;
 
 import Estacionamiento.Vehiculo;
 import Estacionamiento.Propietario;
+import Estacionamiento.Utils;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +25,8 @@ public abstract interface DB {
     public void updateIngreso(Propietario prop);
     public void updateSaldo(Propietario prop, float saldo);
     public float getSaldo(Propietario prop);
+    public void addPrecio(Float precio, Vehiculo.Tipo tipo, Utils.Category categoria);
+    public float getPrecio(Vehiculo.Tipo tipo, Utils.Category categoria);
     }
 
 
