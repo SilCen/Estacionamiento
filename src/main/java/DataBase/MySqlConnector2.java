@@ -276,13 +276,13 @@ public class MySqlConnector2 implements DB {
 
     @Override
     public void addPrecio(Float precio, Tipo tipo, Utils.Category categoria) {
-        //
         ResultSet rs;
         Init(); //es la funcion que inicializa la conex a la bd
         String relacion = "INSERT INTO precio(precio, tipo_vehic, categoria) VALUES ('%s', %d, %d)";
         // Concatenation of two strings
         String datorelacion = String.format(relacion, precio.toString(), tipo.ordinal(), categoria.ordinal());
-        rs = execute(datorelacion);    }
+        rs = execute(datorelacion);    
+    }
 
     @Override
     public float getPrecio(Tipo tipo, Utils.Category categoria) {
