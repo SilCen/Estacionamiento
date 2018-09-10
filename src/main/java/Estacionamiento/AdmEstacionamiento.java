@@ -25,7 +25,8 @@ public class AdmEstacionamiento {
                 + "3-AB de Abono\n"
                 + "4-Cobrar Estacionamiento\n"
                 + "5-Cargar Precios\n"
-                + "6-Salir\n"
+                + "6-Actualizar Saldo\n"
+                + "7-Salir\n"
                 + "Ingrese opcion: ");
     }
 
@@ -49,6 +50,9 @@ public class AdmEstacionamiento {
                 cargarPrecio();
                 break;
             case 6:
+                actualizarSaldo();
+                break;
+            case 7:
                 salir = true;
                 break;
             default:
@@ -247,6 +251,15 @@ public class AdmEstacionamiento {
         System.out.println("Ingrese precio: ");
         float precio = Utils.readFloatCLI();
         db.addPrecio(precio, Tipo.values()[tip_veh], Utils.Category.values()[categ]);
+    }
+
+    private void actualizarSaldo() {
+        System.out.println("Ingrese DNI del propietario: ");
+        int dni = Utils.readIntCLI();
+        Propietario prop =db.getUser(dni);
+        System.out.println("Ingrese monto a acreditar: $");
+        float monto = Utils.readFloatCLI();
+        db.updateSaldo(prop, monto);
     }
     
 }
