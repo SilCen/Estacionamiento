@@ -58,6 +58,7 @@ public class MySqlConnector2 implements DB {
             connections = 0;
             try {
                 conn.close();
+                conn = null;
             } catch (SQLException ex) {
                 Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -143,7 +144,7 @@ public class MySqlConnector2 implements DB {
             while (rs.next()) {
                 String ApeNomProp = rs.getString("ApeNom");
                 Boolean abono = rs.getBoolean("abono");
-                Date ultimoIngreso = rs.getDate("ultimoIngreso");
+                java.sql.Date ultimoIngreso = rs.getDate("ultimoIngreso");
                 prop = new Propietario(ApeNomProp, dni);
                 prop.setAbono(abono);
                 if (ultimoIngreso != null) {
@@ -235,12 +236,15 @@ public class MySqlConnector2 implements DB {
     public void updateIngreso(Propietario prop) {
         ResultSet rs;
         Init(); //es la funcion que inicializa la conex a la bd
-        String relacion = "UPDATE propietario SET ultimoIngreso = '%s' WHERE idPropietario = %d";
+        String relacion = "UPDATE propietario SET ultimoIngreso = '%d-%d-%d' WHERE idPropietario = %d";
         // Concatenation of two strings
-        String date = prop.getUltimoIngreso().getTime().toString();
+        int yy = prop.getUltimoIngreso().get(Calendar.YEAR);
+        int mm = prop.getUltimoIngreso().get(Calendar.MONTH);
+        int dd = prop.getUltimoIngreso().get(Calendar.DAY_OF_MONTH);
+        String datorelacion = String.format(relacion, yy, mm, dd  , prop.getDni());
+        
+        rs = execute(datorelacion);
 
-        String datorelacion = String.format(relacion, date, prop.getDni());
-        // rs = execute(datorelacion);
     }
 
     @Override

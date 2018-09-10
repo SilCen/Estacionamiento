@@ -51,9 +51,10 @@ public class Main {
         db.addVehiculo(v);*/
         
         //System.out.print(prop.getApeNomPropietario()); 
-                        
-      AdmEstacionamiento consola = new AdmEstacionamiento();
-      consola.runMenu();
+        
+        
+     // AdmEstacionamiento consola = new AdmEstacionamiento();
+     // consola.runMenu();
     }
     }
     
