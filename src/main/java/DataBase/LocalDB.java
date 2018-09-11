@@ -70,7 +70,7 @@ public class LocalDB implements DB{
     }
 
     @Override
-    public void updateSaldo(Propietario prop, float saldo) {
+    public void updateSaldo(Propietario prop, Float saldo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

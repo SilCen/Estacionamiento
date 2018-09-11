@@ -30,43 +30,44 @@ public class AdmEstacionamiento {
                 + "Ingrese opcion: ");
     }
 
-    private boolean runCommand(int option) {
+    private boolean runCommand(String option) {
         
         boolean salir = false;
         switch (option) {
-            case 1:
+            case "1":
                 AdmEstacionamiento.this.agregarPropietario(); 
                 break;
-            case 2:
+            case "2":
                 agregarVehiculo();
                 break;
-            case 3:
+            case "3":
                 abAbono();
                 break;
-            case 4:
+            case "4":
                 cobrarEstacionamiento();
                 break;
-            case 5:
+            case "5":
                 cargarPrecio();
                 break;
-            case 6:
+            case "6":
                 actualizarSaldo();
                 break;
-            case 7:
+            case "7":
                 salir = true;
                 break;
             default:
+                System.out.println("Opcion Incorrecta");
                 break;
         }
         return salir;
     }
 
     public void runMenu() {
-        int option = 0;
+        String option;
         boolean cmd;
         do {
             printMenu();
-            option = Utils.readIntCLI();
+            option = Utils.readStringCLI();
             cmd = runCommand(option);
         } while (!cmd);
     }
@@ -225,12 +226,14 @@ public class AdmEstacionamiento {
             Tipo devTipo = v.getTipo();
             db.updateIngreso(prop);
             float precio;
-            
+            float abono;
             if (isAbono) {
                 precio = db.getPrecio(devTipo, Utils.Category.conAbono);
+                abono = db.getSaldo(prop);
+                db.updateSaldo(prop, abono - precio);
                 System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
-                System.out.printf("Valor : %.2f\n", precio);
-                System.out.printf("El saldo es: %.2f\n", db.getSaldo(prop));
+                System.out.printf("Valor $ %.2f\n", precio);
+                System.out.printf("El saldo es $ %.2f\n", db.getSaldo(prop));
             }
             else{
                 precio = db.getPrecio(devTipo, Utils.Category.sinAbono);
@@ -254,12 +257,13 @@ public class AdmEstacionamiento {
     }
 
     private void actualizarSaldo() {
-        System.out.println("Ingrese DNI del propietario: ");
+        System.out.print("Ingrese DNI del propietario: ");
         int dni = Utils.readIntCLI();
         Propietario prop =db.getUser(dni);
-        System.out.println("Ingrese monto a acreditar: $");
-        float monto = Utils.readFloatCLI();
-        db.updateSaldo(prop, monto);
+        System.out.print("Ingrese monto a acreditar: $ ");
+        float monto = Utils.readFloatCLI() +db.getSaldo(prop);
+        db.updateSaldo(prop,  monto);
+        System.out.printf("Saldo Actual: $ %.2f\n", monto);
     }
     
 }

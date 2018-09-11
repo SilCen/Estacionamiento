@@ -23,7 +23,7 @@ public abstract interface DB {
     public boolean CheckRelacion(int dni, String dom);
     public void updateAbono(Propietario prop);
     public void updateIngreso(Propietario prop);
-    public void updateSaldo(Propietario prop, float saldo);
+    public void updateSaldo(Propietario prop, Float saldo);
     public float getSaldo(Propietario prop);
     public void addPrecio(Float precio, Vehiculo.Tipo tipo, Utils.Category categoria);
     public float getPrecio(Vehiculo.Tipo tipo, Utils.Category categoria);

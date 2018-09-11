@@ -20,7 +20,6 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  *
@@ -127,7 +126,7 @@ public class MySqlConnector2 implements DB {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //Close();
+        Close();
         return list;
     }
 
@@ -150,6 +149,7 @@ public class MySqlConnector2 implements DB {
                 if (ultimoIngreso != null) {
                     Calendar calen = Calendar.getInstance();
                     calen.setTime(ultimoIngreso); //aqui transformo de date a calen
+                    calen.set(Calendar.DAY_OF_MONTH, calen.get(Calendar.DAY_OF_MONTH)+1);
                     prop.setUltimoIngreso(calen); //seteo el ultimo ingreso
                 }
             }
@@ -158,7 +158,7 @@ public class MySqlConnector2 implements DB {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //Close();
+        Close();
         return prop;
     }
 
@@ -174,7 +174,7 @@ public class MySqlConnector2 implements DB {
         // Concatenation of two strings
         String datoprop = String.format(str, prop.getDni(), prop.getApeNomPropietario(), (prop.isAbono()) ? 1 : 0);
         rs = execute(datoprop);
-        //Close();    
+        Close();    
     }
 
     @Override
@@ -185,7 +185,7 @@ public class MySqlConnector2 implements DB {
         // Concatenation of two strings
         String datovehiculo = String.format(str, v.getModelo(), v.getDominio(), v.getMarca(), v.getTipo().ordinal());
         rs = execute(datovehiculo);
-        //Close();    
+        Close();    
     }
 
     @Override
@@ -196,6 +196,7 @@ public class MySqlConnector2 implements DB {
         // Concatenation of two strings
         String datorelacion = String.format(relacion, prop.getDni(), v.getDominio());
         rs = execute(datorelacion);
+        Close();
     }
 
     @Override
@@ -213,7 +214,7 @@ public class MySqlConnector2 implements DB {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //Close();
+        Close();
         return exist;
     }
 
@@ -226,10 +227,16 @@ public class MySqlConnector2 implements DB {
         String datorelacion = String.format(relacion, (prop.isAbono()) ? 1 : 0, prop.getDni());
         rs = execute(datorelacion);
         
-        relacion = "INSERT INTO abono (propid, saldo) VALUES (%d, 0)";
-        // Concatenation of two strings
+        if (prop.isAbono()) {
+            relacion = "INSERT INTO abono (propid, saldo) VALUES (%d, 0)";
+        } else {
+            relacion = "DELETE FROM abono WHERE propid= %d";
+        }
+
         datorelacion = String.format(relacion, prop.getDni());
+        
         rs = execute(datorelacion);
+        Close();
     }
 
     @Override
@@ -241,20 +248,22 @@ public class MySqlConnector2 implements DB {
         int yy = prop.getUltimoIngreso().get(Calendar.YEAR);
         int mm = prop.getUltimoIngreso().get(Calendar.MONTH);
         int dd = prop.getUltimoIngreso().get(Calendar.DAY_OF_MONTH);
-        String datorelacion = String.format(relacion, yy, mm, dd  , prop.getDni());
+        String datorelacion = String.format(relacion, yy, mm+1, dd  , prop.getDni());
         
         rs = execute(datorelacion);
+        Close();
 
     }
 
     @Override
-    public void updateSaldo(Propietario prop, float saldo) {
+    public void updateSaldo(Propietario prop, Float saldo) {
         ResultSet rs;
         Init(); //es la funcion que inicializa la conex a la bd
-        String relacion = "UPDATE abono SET saldo = '%.2f' WHERE propid = %d";
+        String relacion = "UPDATE abono SET saldo = '%s' WHERE propid = %d";
         // Concatenation of two strings
-        String datorelacion = String.format(relacion, saldo, prop.getDni());
+        String datorelacion = String.format(relacion, saldo.toString(), prop.getDni());
         rs = execute(datorelacion);
+        Close();
     }
 
     @Override
@@ -275,6 +284,7 @@ public class MySqlConnector2 implements DB {
         } catch (SQLException ex) {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Close();
         return saldo;
     }
 
@@ -285,7 +295,8 @@ public class MySqlConnector2 implements DB {
         String relacion = "INSERT INTO precio(precio, tipo_vehic, categoria) VALUES ('%s', %d, %d)";
         // Concatenation of two strings
         String datorelacion = String.format(relacion, precio.toString(), tipo.ordinal(), categoria.ordinal());
-        rs = execute(datorelacion);    
+        rs = execute(datorelacion);
+        Close();
     }
 
     @Override
@@ -306,6 +317,7 @@ public class MySqlConnector2 implements DB {
         } catch (SQLException ex) {
             Logger.getLogger(MySqlConnector2.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Close();
         return precio;
     }
 }

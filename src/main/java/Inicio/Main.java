@@ -5,15 +5,9 @@
  */
 package Inicio;
 
-import DataBase.DB;
-import DataBase.MySqlConnector2;
-import DataBase.VehiculoJpaController;
+
 import Estacionamiento.AdmEstacionamiento;
-import Estacionamiento.Auto;
-import Estacionamiento.Moto;
-import Estacionamiento.Propietario;
-import Estacionamiento.Vehiculo;
-import java.util.ArrayList;
+
 
 /**
  *
@@ -53,8 +47,8 @@ public class Main {
         //System.out.print(prop.getApeNomPropietario()); 
         
         
-     // AdmEstacionamiento consola = new AdmEstacionamiento();
-     // consola.runMenu();
+      AdmEstacionamiento consola = new AdmEstacionamiento();
+      consola.runMenu();
     }
     }
     
