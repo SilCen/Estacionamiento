@@ -31,11 +31,11 @@ public class AdmEstacionamiento {
     }
 
     private boolean runCommand(String option) {
-        
+
         boolean salir = false;
         switch (option) {
             case "1":
-                AdmEstacionamiento.this.agregarPropietario(); 
+                AdmEstacionamiento.this.agregarPropietario();
                 break;
             case "2":
                 agregarVehiculo();
@@ -71,13 +71,13 @@ public class AdmEstacionamiento {
             cmd = runCommand(option);
         } while (!cmd);
     }
-    
+
     private void agregarPropietario() {
-        System.out.print("Ingrese DNI: ");  
-        int dni = Utils.readIntCLI(); 
+        System.out.print("Ingrese DNI: ");
+        int dni = Utils.readIntCLI();
         agregarPropietario(dni);
     }
-    
+
     private Propietario agregarPropietario(int dni) {
         Propietario prop = db.getUser(dni);
         if (prop != null) {
@@ -92,11 +92,11 @@ public class AdmEstacionamiento {
         return prop;
     }
 
-   private void agregarVehiculo() {
+    private void agregarVehiculo() {
         System.out.println("Ingrese el DNI del propietario: ");
         int dni = Utils.readIntCLI();
         Propietario prop = db.getUser(dni);
-        if ( prop == null) {
+        if (prop == null) {
             System.out.println("El propietario no existe, debe ingresarlo");
             prop = agregarPropietario(dni);
         }
@@ -113,7 +113,7 @@ public class AdmEstacionamiento {
 
     public void altaDomDni(String dom, Propietario prop) {
         ArrayList<Vehiculo> lista = db.getVehiculo(dom);
-        
+
         if (lista.isEmpty()) {
             System.out.println("Ingrese el modelo: ");
             String mod = Utils.readStringCLI();
@@ -146,7 +146,7 @@ public class AdmEstacionamiento {
                     return;
             }
             cargaVehiculo(mod, mar, dom, tipo, prop);
-            
+
             System.out.println("La registracion del vehiculo fue exitosa");
         } else {
             Vehiculo v = lista.get(0);
@@ -156,7 +156,7 @@ public class AdmEstacionamiento {
     }
 
     public void cargaVehiculo(String mod, String mar, String dom, Tipo coso, Propietario prop) {
-     
+
         Vehiculo V = null;
 
         switch (coso) {
@@ -199,18 +199,18 @@ public class AdmEstacionamiento {
             prop.setAbono(isAbono);
             db.updateAbono(prop);
         }
-   }
+    }
 
     public void cobrarEstacionamiento() {
         ArrayList<Vehiculo> lista;
-        
+
         System.out.print("Ingrese DNI: ");
         int dni = Utils.readIntCLI();
         Propietario prop = db.getUser(dni);
-      
+
         if (prop != null) {
             System.out.println("Usuario existente: " + dni);
-            if(prop.ingresoPropietario()){
+            if (prop.ingresoPropietario()) {
                 System.out.println("El propietario ya ingreso");
                 return;
             }
@@ -218,35 +218,39 @@ public class AdmEstacionamiento {
             System.out.print("Ingrese Dominio: ");
             String dom = Utils.readStringCLI();
             boolean existeDom = db.CheckRelacion(dni, dom);
-            if(!existeDom){
-                altaDomDni(dom,prop);
+            if (!existeDom) {
+                altaDomDni(dom, prop);
             }
             lista = db.getVehiculo(dom);
-            Vehiculo v = lista.get(0);          
+            Vehiculo v = lista.get(0);
             Tipo devTipo = v.getTipo();
             db.updateIngreso(prop);
             float precio;
             float abono;
+            float saldo;
             if (isAbono) {
                 precio = db.getPrecio(devTipo, Utils.Category.conAbono);
                 abono = db.getSaldo(prop);
-                db.updateSaldo(prop, abono - precio);
-                System.out.println("Cobramos precio con Abono de tipo: "+ devTipo);
-                System.out.printf("Valor $ %.2f\n", precio);
-                System.out.printf("El saldo es $ %.2f\n", db.getSaldo(prop));
-            }
-            else{
+                saldo = abono - precio;
+                if (saldo > (-3 * abono)) {
+                    db.updateSaldo(prop, abono - precio);
+                    System.out.println("Cobramos precio con Abono de tipo: " + devTipo);
+                    System.out.printf("Valor $ %.2f\n", precio);
+                    System.out.printf("El saldo es $ %.2f\n", db.getSaldo(prop));
+                } else {
+                    System.out.println("Saldo insuficiente");
+                }
+            } else {
                 precio = db.getPrecio(devTipo, Utils.Category.sinAbono);
-                System.out.println("Cobramos precio sin Abono de tipo: "+ devTipo);
+                System.out.println("Cobramos precio sin Abono de tipo: " + devTipo);
                 System.out.printf("Valor : %.2f\n", precio);
             }
-        }
-        else {
+        } else {
             System.out.println("Usuario no existte");
-       }
-  }
-    
-    public void cargarPrecio(){
+        }
+    }
+
+    public void cargarPrecio() {
         System.out.println("Ingrese tipo de vehículo: (0. AUTO - 1.MOTO)");
         int tip_veh = Utils.readIntCLI();
         System.out.println("Ingrese categoría: (0. Con Abono - 1. Sin Abono)");
@@ -259,11 +263,11 @@ public class AdmEstacionamiento {
     private void actualizarSaldo() {
         System.out.print("Ingrese DNI del propietario: ");
         int dni = Utils.readIntCLI();
-        Propietario prop =db.getUser(dni);
+        Propietario prop = db.getUser(dni);
         System.out.print("Ingrese monto a acreditar: $ ");
-        float monto = Utils.readFloatCLI() +db.getSaldo(prop);
-        db.updateSaldo(prop,  monto);
+        float monto = Utils.readFloatCLI() + db.getSaldo(prop);
+        db.updateSaldo(prop, monto);
         System.out.printf("Saldo Actual: $ %.2f\n", monto);
     }
-    
+
 }
