@@ -224,7 +224,6 @@ public class AdmEstacionamiento {
             lista = db.getVehiculo(dom);
             Vehiculo v = lista.get(0);
             Tipo devTipo = v.getTipo();
-            db.updateIngreso(prop);
             float precio;
             float abono;
             float saldo;
@@ -232,19 +231,21 @@ public class AdmEstacionamiento {
                 precio = db.getPrecio(devTipo, Utils.Category.conAbono);
                 abono = db.getSaldo(prop);
                 saldo = abono - precio;
-                if (saldo > (-3 * abono)) {
+                if (saldo > (-3 * precio)) {
                     db.updateSaldo(prop, abono - precio);
                     System.out.println("Cobramos precio con Abono de tipo: " + devTipo);
                     System.out.printf("Valor $ %.2f\n", precio);
                     System.out.printf("El saldo es $ %.2f\n", db.getSaldo(prop));
                 } else {
                     System.out.println("Saldo insuficiente");
+                    return;
                 }
             } else {
                 precio = db.getPrecio(devTipo, Utils.Category.sinAbono);
                 System.out.println("Cobramos precio sin Abono de tipo: " + devTipo);
                 System.out.printf("Valor : %.2f\n", precio);
             }
+            db.updateIngreso(prop);
         } else {
             System.out.println("Usuario no existte");
         }
